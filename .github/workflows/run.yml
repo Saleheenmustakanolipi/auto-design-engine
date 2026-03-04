@@ -2,9 +2,7 @@ name: Daily Design Generator
 
 on:
   schedule:
-    - cron: '0 19 * * *'  # 1 AM Bangladesh
-  workflow_dispatch:
-
+  workflow_dispatch: 
 jobs:
   build:
     runs-on: ubuntu-latest
