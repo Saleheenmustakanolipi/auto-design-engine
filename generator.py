@@ -3,11 +3,10 @@ import random
 import re
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
 
 # ===== SETTINGS =====
-SHEET_ID = "PASTE_YOUR_SHEET_ID"
-SHEET_NAME = "Sheet1"
+SHEET_ID = "1YfpDVqaxkUB4NxE9l336I95707Ajchjhwz3MUM-X2_8"
+SHEET_NAME = "Sheet 1"
 IMAGE_SIZE = 1080
 
 FONTS = [
@@ -39,7 +38,7 @@ def create_horizontal_gradient(size, color1, color2, reverse=False):
     for x in range(size):
         ratio = x / size
         if reverse:
-        ratio = 1 - ratio
+            ratio = 1 - ratio
         r = int(color1[0]*(1-ratio) + color2[0]*ratio)
         g = int(color1[1]*(1-ratio) + color2[1]*ratio)
         b = int(color1[2]*(1-ratio) + color2[2]*ratio)
@@ -60,9 +59,11 @@ def wrap_text(draw, text, font, max_width):
         if w <= max_width:
             current = test
         else:
-            lines.append(current)
+            if current:
+                lines.append(current)
             current = word
-    lines.append(current)
+    if current:
+        lines.append(current)
     return lines
 
 # Load Google Sheet as CSV
@@ -74,7 +75,7 @@ if not os.path.exists("output"):
 
 for _, row in df.iterrows():
     text = str(row["text"]).strip()
-    
+
     # Choose background
     if random.choice([True, False]):
         bg_color = random.choice(SOLID_COLORS)
@@ -85,18 +86,36 @@ for _, row in df.iterrows():
         img = create_horizontal_gradient(IMAGE_SIZE, g[0], g[1], reverse)
 
     draw = ImageDraw.Draw(img)
-    
+
     # Choose font
     font_path = random.choice(FONTS)
     font_size = random.randint(70,100)
     font = ImageFont.truetype(font_path, font_size)
-    
+
     # Wrap text
     max_width = IMAGE_SIZE * 0.8
     lines = wrap_text(draw, text, font, max_width)
-    
-    # Center vertical
+
+    # Calculate total height
     total_height = sum(draw.textbbox((0,0), line, font=font)[3] for line in lines) + (len(lines)-1)*15
-    current_y = (IMAGE_SIZE - total_height)/2
-    
-    for line in lines: 
+    current_y = (IMAGE_SIZE - total_height) / 2
+
+    for line in lines:
+        w = draw.textlength(line, font=font)
+        x = (IMAGE_SIZE - w) / 2
+        draw.text(
+            (x, current_y),
+            line,
+            font=font,
+            fill="white",
+            stroke_width=2,
+            stroke_fill="black"
+        )
+        current_y += font_size + 15
+
+    # Save locally
+    filename = clean_filename(text)
+    img_path = os.path.join("output", filename)
+    img.save(img_path)
+
+print("All designs generated locally in 'output/' folder!") 
