@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # ===== SETTINGS =====
 SHEET_ID = "1YfpDVqaxkUB4NxE9l336I95707Ajchjhwz3MUM-X2_8"
-SHEET_NAME = "Sheet 1"
+SHEET_NAME = "Sheet1"
 IMAGE_SIZE = 1080
 
 FONTS = [
@@ -67,7 +67,7 @@ def wrap_text(draw, text, font, max_width):
     return lines
 
 # Load Google Sheet as CSV
-csv_url = f"https://docs.google.com/spreadsheets/d/1YfpDVqaxkUB4NxE9l336I95707Ajchjhwz3MUM-X2_8/gviz/tq?tqx=out:csv&sheet=Sheet 1"
+csv_url = f"https://docs.google.com/spreadsheets/d/1YfpDVqaxkUB4NxE9l336I95707Ajchjhwz3MUM-X2_8/gviz/tq?tqx=out:csv&sheet=Sheet1"
 df = pd.read_csv(csv_url)
 
 if not os.path.exists("output"):
