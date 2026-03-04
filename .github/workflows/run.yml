@@ -2,29 +2,30 @@ name: Daily Design Generator
 
 on:
   schedule:
-  workflow_dispatch: 
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install pillow pandas
+      - name: Install dependencies
+        run: |
+          pip install pillow pandas
 
-    - name: Run generator.py
-      run: python generator.py
+      - name: Run generator.py
+        run: python generator.py
 
-    # ✅ ADD THIS PART
-  - name: Upload generated images
-  uses: actions/upload-artifact@v4
-  with:
-    name: generated-designs
-    path: output/ 
+      - name: Upload generated images
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-designs
+          path: output/
