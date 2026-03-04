@@ -39,7 +39,7 @@ def create_horizontal_gradient(size, color1, color2, reverse=False):
     for x in range(size):
         ratio = x / size
         if reverse:
-            ratio = 1 - ratio
+        ratio = 1 - ratio
         r = int(color1[0]*(1-ratio) + color2[0]*ratio)
         g = int(color1[1]*(1-ratio) + color2[1]*ratio)
         b = int(color1[2]*(1-ratio) + color2[2]*ratio)
